@@ -10,12 +10,13 @@ MyString::MyString()
 
 MyString::MyString(const MyString& srcStr)
 {
-	this->string = new char[srcStr.length()];
+	string = new char[srcStr.length() + 1];
 	//길이가 8이 아닐떄의 해결
-	for (int i = 0; i < length(); i++)
+	for (int i = 0; i < srcStr.length() - 1; i++)
 	{
 		this->string[i] = srcStr.getChar(i);
 	}
+	string[srcStr.length() + 1] = '\0';
 }
 
 MyString::~MyString()
@@ -26,19 +27,20 @@ MyString::~MyString()
 
 int MyString::length() const
 {
-	int i;
+	int i = 0;
 	while (true)
 	{
-		if (this->string != '\0')
+		if (this->string[i] != '\0')
 		{
 			i++;
 			continue;
 		}
 		else
 		{
-			return i;
+			break;
 		}
 	}
+	return i;
 }
 
 void MyString::resize()
@@ -93,3 +95,63 @@ MyString MyString::operator=(const MyString& srcStr)
 	return *this;
 }
 
+
+char& MyString::at(int pos)
+{
+	return string[pos];
+}
+
+char& MyString::operator[](int pos)
+{
+	return string[pos];
+}
+
+const char& MyString::operator[](int pos) const
+{
+	return string[pos];
+}
+
+ostream& operator<<(ostream& os, const MyString& str)
+{
+	for (int i = 0; i < str.length(); i++)
+	{
+		os << str.getChar(i);
+	}
+
+	return os;
+}
+
+istream& operator>>(istream& is, MyString& str)
+{
+
+	char c;
+	int i = 0;
+	while (true)
+	{
+		if (i == str.getCapatity())
+		{
+			str.resize();
+		}
+		str.get(c);
+		str.setChar(i,c);
+		i++;
+	}
+}
+
+void MyString::setChar(int i , char c)
+{
+	string[i] = c;
+	return;
+}
+
+char MyString::get(char c)
+{
+	if (c == '\n')
+	{
+		return 
+	}
+	else
+	{
+		return c;
+	}
+}
