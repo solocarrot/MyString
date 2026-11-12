@@ -121,37 +121,122 @@ ostream& operator<<(ostream& os, const MyString& str)
 	return os;
 }
 
-istream& operator>>(istream& is, MyString& str)
+void MyString::upSize()
 {
-
-	char c;
-	int i = 0;
-	while (true)
-	{
-		if (i == str.getCapatity())
-		{
-			str.resize();
-		}
-		str.get(c);
-		str.setChar(i,c);
-		i++;
-	}
+	size++;
 }
 
-void MyString::setChar(int i , char c)
+int MyString::getSize()
 {
-	string[i] = c;
+	return size;
+}
+
+istream& operator>>(istream& is, MyString& str)
+{
+	
+	char c = is.get();
+	while (c == ' ')
+	{
+		c = is.get();
+	}
+
+
+	for (;c != '\n';c = is.get())
+	{
+		str.append(c);
+	}
+	return is;
+}
+
+void MyString::append(char c)
+{
+	if (size + 1 == capacity)
+	{
+		resize();
+	}
+	string[size] = c;
+	size++;
+	string[size + 1] = '\0';
 	return;
 }
 
-char MyString::get(char c)
+istream& getline(istream& is, MyString& str, char delim = '\n')
 {
-	if (c == '\n')
+	char c = is.get();
+	while (c != delim)
 	{
-		return 
+		str.append(c);
+		c = is.get();
+	}
+	return is;
+}
+
+MyString::MyString(const char* cstr2nd)
+{
+	for (int i = 0; cstr2nd[i] != '\0'; i++)
+	{
+		append(cstr2nd[i]);
+	}
+}
+
+MyString& MyString::operator=(const char* cstr2nd)
+{
+	for (int i = 0; cstr2nd[i] != '\0'; i++)
+	{
+		append(cstr2nd[i]);
+	}
+}
+
+const MyString MyString::operator+(const char* cstr2nd)
+{
+	MyString resultString;
+	//임시객체이기때문에 함수끝날때 사라지니까 깊은복사를해야된다?
+	//append에서 resize를 구현해둬서 크기에대한 고민을안해도된다.
+
+	for (int i = 0; i < this->size; i++)
+	{
+		resultString.append(string[i]);
+	}
+
+	for (int i = 0; cstr2nd[i] != '\0'; i++)
+	{
+		resultString.append(cstr2nd[i]);
+	}
+
+	return resultString;
+}
+
+const MyString MyString::operator+(const MyString& str2nd)
+{
+	MyString resultString;
+
+	for (int i = 0; i < this->size; i++)
+	{
+		resultString.append(this->string[i]);
+	}
+
+	for (int i = 0; i < str2nd.length(); i++)
+	{
+		resultString.append(str2nd.getChar(i));
+	}
+
+	return resultString;
+}
+
+bool MyString::operator==(const MyString& str)
+{
+	if (this->size != str.length())
+	{
+		return false;
 	}
 	else
 	{
-		return c;
+		int i = 0;
+		while (i < this->size)
+		{
+			if (this->string[i] != str.getChar(i)) return false;
+			i++;
+		}
 	}
+	return true;
 }

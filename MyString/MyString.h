@@ -8,6 +8,7 @@ class MyString
 public:
 	MyString();
 	MyString(const MyString&);
+	MyString(const char*);
 	~MyString();
 
 	int length() const;
@@ -19,14 +20,16 @@ public:
 	char& operator[](int);
 	const char& operator[](int) const;
 
-	void setChar(int , char);
+	void append(char);
 	void get(char);
 
-
-
-
-
 	MyString operator=(const MyString&);
+	MyString& operator=(const char*);
+	const MyString operator+(const char*);
+	const MyString operator+(const MyString&);
+	bool operator==(const MyString&);
+
+
 
 private:
 	char* string;
@@ -34,6 +37,6 @@ private:
 	int size;
 };
 
-ostream& operator<<(ostream& os, const MyString& str);
-istream& operator>>(istream& is, MyString& str);
+ostream& operator<<(ostream& os, const MyString&);
+istream& operator>>(istream& is, MyString&);
 istream& getline(istream& is, MyString& str, char delim = '\n');
